@@ -4,10 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Form Filler</title>
-    <link rel="stylesheet" href="popup.css">
+    <!--<link rel="stylesheet" href="popup.css">-->
 </head>
 <body>
     <h1>LinkedIn profile</h1>
+    <form method="post">
+        <label for="information">Personal Information</label><br>
+        <input type="text" id="fname" name="fname" placeholder="Name" required><br>
+        <input type="text" id="lname" name="lname" placeholder="Surname" required><br>
+        <input type="text" id="location" name="location" placeholder="Location" required><br>
+        <br>
+        <label for="education">Education</label><br>
+        <input type="text" id="school" name="school" placeholder="School" required><br>
+        <input type="text" id="degree" name="degree" placeholder="Degree" required><br>
+        <input type="text" id="study" name="study" placeholder="Field of Study" required><br>
+        <br>
+        <label for="education">Work Experience</label><br>
+        <input type="text" id="industry" name="industry" placeholder="Industry" required><br>
+        <br>
+        <label for="contacts">Contacts</label><br>
+        <input type="text" id="number" name="number" placeholder="Phone Number" required><br>
+        <input type="email" id="email" name="email" placeholder="E-mail" required><br>
+        <br>
+    </form>
 </body>
 <script src="popup.js"></script>
 </html>
