@@ -5,6 +5,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
     } else if (message.action === "name-sent") {
         chrome.storage.local.set({ name: message.name });
+        chrome.storage.local.set({ surname: message.surname });
     }
 });
 

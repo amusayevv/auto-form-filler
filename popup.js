@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    chrome.storage.local.get("name", (data) => {
+    chrome.storage.local.get(["name", "surname"], (data) => {
         if (data.name) {
-            document.querySelector("h1").innerText = data.name;
-        } else {
-            document.querySelector("h1").innerText = "LinkedIn profile";
+            document.querySelector("#fname").value = data.name;
+        }
+        if(data.surname) {
+            document.querySelector("#lname").value = data.surname;
         }
     });
 });
