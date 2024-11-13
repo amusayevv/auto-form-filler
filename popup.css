@@ -58,6 +58,30 @@ body {
     font-size: 14px;
 }
 
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: rgb(237, 237, 159);
+    
+}
+
+input[type="text"], input[type="email"]{
+    background-color: #303030;
+    color:white;
+    padding: 7px;
+    border-radius: 10px;
+    width: 100%;
+    border:none;
+    margin-bottom: 10px;
+}
+
+h1{
+    margin-top: 10px;
+    margin-top: 20px;
+    font-size: 20px;
+    color: rgb(237, 237, 159);
+}
+
 button, .connect-button{
     display: flex;
     height: 40px;
