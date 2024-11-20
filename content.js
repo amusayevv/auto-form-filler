@@ -27,9 +27,31 @@ if(window.location.href.includes("linkedin.com/in")) {
     document.body.appendChild(getLinkedinData);
 
     getLinkedinData.addEventListener("click", () => {
+        console.log("Button clicked!");
         const userNameAndSurname = document.querySelector("h1").innerText;
-        const userName = userNameAndSurname.split(' ')[0];
-        const userSurname = userNameAndSurname.split(' ')[1];
+        console.log(userNameAndSurname);
+        const firstName = userNameAndSurname.split(' ')[0];
+        const lastName = userNameAndSurname.split(' ')[1];
         const title = document.querySelector(".text-body-medium").innerText;
+
+        let userData = {
+            firstName: firstName,
+            lastName: lastName,
+            title: title
+        };
+    
+        try {
+            chrome.storage.local.get(["profiles"], function(result) {
+                let profiles = result.profiles || [];
+    
+                profiles.push(JSON.stringify(userData));
+    
+                chrome.storage.local.set({ profiles: profiles }, function() {
+                    console.log("Profile saved successfully!", profiles);
+                });
+            });
+        } catch (error) {
+            console.error("Error saving profile:", error);
+        }
     });
 }
