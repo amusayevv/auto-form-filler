@@ -33,24 +33,54 @@ if(window.location.href.includes("linkedin.com/in")) {
         const firstName = userNameAndSurname.split(' ')[0];
         const lastName = userNameAndSurname.split(' ')[1];
         const title = document.querySelector(".text-body-medium").innerText;
+        const location = document.querySelector(".text-body-small.inline.t-black--light.break-words").innerText;
+
+        
+    // Function to extract current workplace and educational institution from LinkedIn DOM
+    // OpenAI. (2024, November 20). ChatGPT (Version: GPT-4) [Large language model]. 
+    const workplaceButton = document.querySelector(
+            'button[aria-label^="Current company"]'
+        );
+        const workplaceText = workplaceButton
+            ? workplaceButton.querySelector("div").innerText.trim() : "";
+    
+        // Extract the educational institution
+        const educationButton = document.querySelector(
+            'button[aria-label^="Education"]'
+        );
+        const educationText = educationButton
+            ? educationButton.querySelector("div").innerText.trim() : "";
+        
 
         let userData = {
             firstName: firstName,
             lastName: lastName,
-            title: title
+            title: title,
+            school: school,
+            major: major,
+            workPlace: workplaceText,
+            location: location
         };
     
         try {
             chrome.storage.local.get(["profiles"], function(result) {
                 let profiles = result.profiles || [];
-    
-                profiles.push(JSON.stringify(userData));
-    
-                chrome.storage.local.set({ profiles: profiles }, function() {
-                    console.log("Profile saved successfully!", profiles);
-                });
+                const isDuplicate = profiles.some(profile =>
+                    profile.firstName === userData.firstName &&
+                    profile.lastName === userData.lastName
+                );
+            
+                if (!isDuplicate) {
+                    profiles.push(userData);
+                    chrome.storage.local.set({ profiles: profiles }, function() {
+                        console.log("Profile saved successfully!", profiles);
+                    });
+                } else {
+                    console.log("Duplicate profile detected, not saving.");
+                }
             });
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("Error saving profile:", error);
         }
     });
