@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("school").value = selectedProfile.school || "";
                 // document.getElementById("degree").value = selectedProfile.degree || "";
                 // document.getElementById("study").value = selectedProfile.study || "";
-                document.getElementById("industry").value = selectedProfile.workPlace || "";
+                document.getElementById("workPlace").value = selectedProfile.workPlace || "";
                 // document.getElementById("number").value = selectedProfile.number || "";
                 // document.getElementById("email").value = selectedProfile.email || "";
             }
@@ -33,10 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveButton = document.querySelector("#saveButton");
 
     saveButton.addEventListener("click", () => {
-        let firstName = document.getElementById("fname").value || "";
-        let lastName = document.getElementById("lname").value || "";
-        let location = document.getElementById("location").value || "";
-        let school = document.getElementById("school").value || "";
-        let workPlace = document.getElementById("industry").value || "";
+        const selectedIndex = dropdownMenu.value;
+
+        const updatedProfile = {
+            firstName: document.getElementById("fname").value || "",
+            lastName: document.getElementById("lname").value || "",
+            location: document.getElementById("location").value || "",
+            school: document.getElementById("school").value || "",
+            degree: document.getElementById("degree").value || "",
+            workPlace: document.getElementById("workPlace").value || "",
+        };
+
+        chrome.storage.local.get(["profiles"], (result) => {
+            const profiles = result.profiles || [];
+            if (selectedIndex !== "" && profiles[selectedIndex]) {
+                profiles[selectedIndex] = updatedProfile;
+
+                try {
+                    chrome.storage.local.set({ profiles: profiles }, () => {
+                        alert("Profile updated successfully!");
+                        console.log("Profile updated successfully!", profiles[selectedIndex]);
+                    });    
+                } catch (error) {
+                    console.log("Error: " + error);
+                }
+            }
+        });
     });
 });
