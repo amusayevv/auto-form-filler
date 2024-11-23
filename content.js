@@ -36,28 +36,29 @@ if(window.location.href.includes("linkedin.com/in")) {
         const location = document.querySelector(".text-body-small.inline.t-black--light.break-words").innerText;
 
         
-    // Function to extract current workplace and educational institution from LinkedIn DOM
-    // OpenAI. (2024, November 20). ChatGPT (Version: GPT-4) [Large language model]. 
-    const workplaceButton = document.querySelector(
+        // Function to extract current workplace and educational institution from LinkedIn DOM
+        // OpenAI. (2024, November 20). ChatGPT (Version: GPT-4) [Large language model]. 
+        const workplaceButton = document.querySelector(
             'button[aria-label^="Current company"]'
         );
         const workplaceText = workplaceButton
-            ? workplaceButton.querySelector("div").innerText.trim() : "";
-    
+            ? workplaceButton.querySelector("div").innerText.trim()
+            : "";
+
         // Extract the educational institution
         const educationButton = document.querySelector(
             'button[aria-label^="Education"]'
         );
         const educationText = educationButton
-            ? educationButton.querySelector("div").innerText.trim() : "";
+            ? educationButton.querySelector("div").innerText.trim()
+            : "";
         
 
         let userData = {
             firstName: firstName,
             lastName: lastName,
             title: title,
-            school: school,
-            major: major,
+            school: educationText,
             workPlace: workplaceText,
             location: location
         };
@@ -74,6 +75,7 @@ if(window.location.href.includes("linkedin.com/in")) {
                     profiles.push(userData);
                     chrome.storage.local.set({ profiles: profiles }, function() {
                         console.log("Profile saved successfully!", profiles);
+                        alert("Profile saved successfully!");
                     });
                 } else {
                     console.log("Duplicate profile detected, not saving.");
@@ -82,6 +84,7 @@ if(window.location.href.includes("linkedin.com/in")) {
         } 
         catch (error) {
             console.error("Error saving profile:", error);
+            alert("Error saving profile:", error);
         }
     });
 }
