@@ -196,7 +196,7 @@ form {
     justify-content: center;
     align-items: center;
     border-radius: 104px;
-    background: #05070B;
+    background: transparent;
 }
 
 .icon-button:hover {
