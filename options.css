@@ -65,4 +65,8 @@ body {
     margin-right: 10px;
     filter: invert(100%); 
   }
+  body {
+    width: 100%;
+    display: flex;
+  }
   
