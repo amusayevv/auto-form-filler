@@ -210,3 +210,50 @@ form {
   'GRAD' 0,
   'opsz' 24
 }
+
+.import-cnt {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    background: transparent;
+    z-index: 2;
+    display: none;
+}
+.import-cnt.active {
+    display: block;
+}
+.import-blur {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.import-popup {
+    width: 80%;
+    padding: 24px;
+    background: #05070b;
+    margin: auto;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.import-blur {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: transparent;
+    backdrop-filter: blur(8px);
+    z-index: 2;
+}
+
+.import-wrapper {
+    
+}

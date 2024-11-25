@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const importButton = document.querySelector("#importButton");
     importButton.addEventListener("click", () => {
-        
+        const importPopup = document.querySelector(".import-cnt");
+        importPopup.classList.add("active");
     })
 });
