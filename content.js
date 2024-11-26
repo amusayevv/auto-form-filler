@@ -88,3 +88,178 @@ if(window.location.href.includes("linkedin.com/in")) {
         }
     });
 }
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "autofill") {
+        const profile = message.profile;
+        console.log(profile);
+        autofillForm(profile);
+    }
+});
+
+function autofillForm(profile) {
+    // Enhanced selectors with multiple detection methods
+    const selectors = {
+        nameField: [
+            "[name*='first_name']",
+            "[name*='firstName']",
+            "[name*='name']", 
+            "[id*='first_name']",
+            "[id*='firstName']",
+            "[id*='name']",
+            "[placeholder*='first name']",
+            "[placeholder*='first']",
+            "label[for*='name'] + input",
+            "input[aria-label*='first name']"
+        ],
+        surnameField: [
+            "[name*='last_name']", 
+            "[name*='lastName']",
+            "[name*='surname']",
+            "[id*='last_name']", 
+            "[id*='lastName']",
+            "[id*='surname']",
+            "[placeholder*='last name']",
+            "[placeholder*='last']",
+            "[placeholder*='surname']",
+            "label[for*='last name'] + input",
+            "input[aria-label*='last name']"
+        ],
+        fullnameField: [
+            "[name*='full_name']",
+            "[id*='full_name']",
+            "[placeholder*='full name']",
+            "[placeholder*='full']",
+            "[aria-label*='full name']",
+            "label[for*='full name'] + input",
+            "[name='cName']",
+            "[placeholder='Full Name']",
+            "[ng-model='candidate.name']",
+            "input[placeholder='Type here...'][label*='Full Name']",
+            "[name='_systemfield_name']",
+            "[id='_systemfield_name']"
+        ],
+        locationField: [
+            "[name*='address']",
+            "[name*='location']",
+            "[id*='address']",
+            "[id*='location']",
+            "[placeholder*='address']",
+            "[placeholder*='location']",
+            "[placeholder*='city']",
+            "label[for*='address'] + input",
+            "input[aria-label*='address']",
+            "[name='cAddress']",
+            "[id='fullAddress']",
+            "[placeholder='Address']",
+        ],
+        schoolField: [
+            "[name*='school']",
+            "[name*='university']",
+            "[id*='school']",
+            "[id*='university']",
+            "[placeholder*='school']",
+            "[placeholder*='university']",
+            "[placeholder*='college']",
+            "label[for*='school'] + input",
+            "input[aria-label*='school']"
+        ],
+        degreeField: [
+            "[name*='degree']",
+            "[name*='qualification']",
+            "[id*='degree']",
+            "[id*='qualification']",
+            "[placeholder*='degree']",
+            "[placeholder*='qualification']",
+            "[placeholder*='education']",
+            "label[for*='degree'] + input",
+            "input[aria-label*='degree']"
+        ],
+        workPlaceField: [
+            "[name*='company']",
+            "[name*='workplace']",
+            "[name*='employer']",
+            "[id*='company']",
+            "[id*='workplace']",
+            "[id*='employer']",
+            "[placeholder*='company']",
+            "[placeholder*='workplace']",
+            "[placeholder*='employer']",
+            "label[for*='company'] + input",
+            "input[aria-label*='company']"
+        ],
+        emailField: [
+            "[name*='email']",
+            "[name*='mail']",
+            "[id*='email']",
+            "[id*='mail']",
+            "[type='email']",
+            "[placeholder*='email']",
+            "[placeholder*='mail']",
+            "label[for*='email'] + input",
+            "input[aria-label*='email']",
+            "[name='cEmail']",
+            "[placeholder='Email Address']",
+            "[ng-model='candidate.email_address']",
+            "[type='email']"
+        ],
+        numberField: [
+            "[name*='phone']",
+            "[name*='number']",
+            "[name*='telephone']",
+            "[id*='phone']",
+            "[id*='number']",
+            "[type='tel']",
+            "[placeholder*='phone']",
+            "[placeholder*='number']",
+            "[placeholder*='contact']",
+            "label[for*='phone'] + input",
+            "input[aria-label*='phone']",
+            "[name='cPhoneNumber']",
+            "[placeholder='Phone Number']",
+            "[ng-model='candidate.phone_number']"
+        ]
+    };
+
+    // Function to find the first matching input
+    function findInput(selectorList) {
+        for (let selector of selectorList) {
+            const field = document.querySelector(selector);
+            if (field) return field;
+        }
+        return null;
+    }
+
+    // Find and fill fields
+    const nameField = findInput(selectors.nameField);
+    const surnameField = findInput(selectors.surnameField);
+    const fullnameField = findInput(selectors.fullnameField);
+    const locationField = findInput(selectors.locationField);
+    const schoolField = findInput(selectors.schoolField);
+    const degreeField = findInput(selectors.degreeField);
+    const workPlaceField = findInput(selectors.workPlaceField);
+    const emailField = findInput(selectors.emailField);
+    const numberField = findInput(selectors.numberField);
+
+    // Fill fields if both field and profile data exist
+    if (nameField && profile.firstName) nameField.value = profile.firstName;
+    if (surnameField && profile.lastName) surnameField.value = profile.lastName;
+    
+    // Improved full name handling
+    if (fullnameField) {
+        if (profile.firstName && profile.lastName) {
+            fullnameField.value = `${profile.firstName} ${profile.lastName}`;
+        } else if (profile.firstName) {
+            fullnameField.value = profile.firstName;
+        } else if (profile.lastName) {
+            fullnameField.value = profile.lastName;
+        }
+    }
+
+    if (locationField && profile.location) locationField.value = profile.location;
+    if (schoolField && profile.school) schoolField.value = profile.school;
+    if (degreeField && profile.degree) degreeField.value = profile.degree;
+    if (workPlaceField && profile.workPlace) workPlaceField.value = profile.workPlace;    
+    if (emailField && profile.email) emailField.value = profile.email;
+    if (numberField && profile.number) numberField.value = profile.number;
+}

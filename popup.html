@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Form Filler</title>
     <link rel="stylesheet" href="popup.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete,download,history,home,refresh,save,upload" /></head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=content_paste,delete,delete_forever,download,history,home,refresh,save,upload" /></head>
 <body>
     <div class="cnt">
         <div class="cnt button-cnt data-cnt">
@@ -22,6 +22,10 @@
                 </span>Export</button>
         </div>
 
+        <button id="autoFill" class="autoFill outline"><span class="material-symbols-outlined">
+            content_paste
+            </span>Auto Fill</button>
+
         <form method="post">
             <div class="form-group">
                 <label for="userDropdown">Select a User</label>
@@ -31,25 +35,33 @@
             </div>        
 
             <div class="form-group">
-                <label for="information">Personal Information</label>
+                <h4 class="form-heading">Personal Information</h4>
+                <label for="fname">Name*</label>
                 <input type="text" id="fname" name="fname" placeholder="Name" required>
+                <label for="fname">Surname*</label>
                 <input type="text" id="lname" name="lname" placeholder="Surname" required>
+                <label for="fname">Location</label>
                 <input type="text" id="location" name="location" placeholder="Location">    
             </div>
             
             <div class="form-group">
-                <label for="education">Education</label>
+                <h4 class="form-heading">Education</h4>
+                <label for="school">School</label>
                 <input type="text" id="school" name="school" placeholder="School">
+                <label for="degree">Degree</label>
                 <input type="text" id="degree" name="degree" placeholder="Degree">
             </div>
 
             <div class="form-group">
-                <label for="education">Work Experience</label>
+                <h4 class="form-heading">Work Experience</h4>
+                <label for="workPlace">Workplace</label>
                 <input type="text" id="workPlace" name="workPlace" placeholder="Workplace">    
             </div>
             <div class="form-group">
-                <label for="contacts">Contacts</label>
+                <h4 class="form-heading">Contacts</h4>
+                <label for="number">Phone number</label>
                 <input type="text" id="number" name="number" placeholder="Phone Number">
+                <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="E-mail">    
             </div>  
 
@@ -60,9 +72,12 @@
                 <button type="reset" id="resetButton"><span class="material-symbols-outlined">
                     refresh
                     </span>Reset</button>
-                <button id="deleteButton"><span class="material-symbols-outlined">
+                <button class="deleteButton" id="deleteButton"><span class="material-symbols-outlined">
                     delete
                     </span>Delete</button>
+                <button class="deleteButton" id="wipeData"><span class="material-symbols-outlined">
+                    delete_forever
+                    </span>Wipe all data</button>
             </div>
         </form>
 
@@ -71,7 +86,8 @@
             <div class="import-wrapper">
                 <form method="post" class="import-popup">
                     <label for="import-file">Import data</label>
-                    <input type="file" name="import-file" id="import-file">
+                    <input type="file" name="import-file" id="import-file">                
+                    <button id="importDataButton"><span class="material-symbols-outlined">download</span>Import</button>
                 </form>    
             </div>
         </div>

@@ -125,8 +125,78 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     const importButton = document.querySelector("#importButton");
+    const importPopup = document.querySelector(".import-cnt");
     importButton.addEventListener("click", () => {
-        const importPopup = document.querySelector(".import-cnt");
         importPopup.classList.add("active");
     })
+
+    const closePopup = document.querySelector(".import-blur")
+    closePopup.addEventListener("click", () => {
+        importPopup.classList.remove("active");
+    })
+
+    const importDataButton = document.querySelector("#importDataButton");
+    importDataButton.addEventListener("click", (event) => {
+        event.preventDefault(); // Prevent form submission
+        
+        const importFile = document.querySelector("#import-file").files[0];
+        if (!importFile) {
+            alert("Please select a file to import.");
+            return;
+        }
+    
+        const reader = new FileReader();
+    
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result); // Parse the JSON content
+    
+                if (!importedData.profiles || !Array.isArray(importedData.profiles)) {
+                    throw new Error("Invalid JSON format: 'profiles' should be an array.");
+                }
+    
+                chrome.storage.local.get(["profiles"], (result) => {
+                    const existingProfiles = result.profiles || [];
+    
+                    const updatedProfiles = [...existingProfiles, ...importedData.profiles];
+    
+                    chrome.storage.local.set({ profiles: updatedProfiles }, () => {
+                        alert("Data successfully imported!");
+                        importPopup.classList.remove("active");
+                    });
+                });
+            } catch (error) {
+                console.error("Error importing data:", error);
+                alert("Failed to import data. Please ensure the file is in the correct format.");
+            }
+        };
+    
+        reader.onerror = () => {
+            alert("Error reading file. Please try again.");
+        };
+    
+        reader.readAsText(importFile);
+    });    
+
+    const autofillButton = document.querySelector("#autoFill");
+    autofillButton.addEventListener("click", () => {
+        const selectedIndex = document.querySelector("#userDropdown").value;
+        
+        if (selectedIndex === "") {
+            alert("Please select a profile to autofill.");
+            return;
+        }
+    
+        chrome.storage.local.get(["profiles"], (result) => {
+            const profiles = result.profiles || [];
+            const profile = profiles[selectedIndex];
+    
+            if (profile) {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, { action: "autofill", profile });
+                });
+            }
+        });
+    });
+    
 });

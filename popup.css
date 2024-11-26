@@ -59,7 +59,7 @@ body {
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-top: 8px;
     color: #b7b8c4;
     font-size: 14px;
     
@@ -113,6 +113,7 @@ button:hover, .connect-button:hover {
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
+    margin-top: 24px;
 }
 form {
     width: 100%;
@@ -154,13 +155,13 @@ form {
     margin: 0;
 }
 
-#deleteButton {
+.deleteButton {
     color: #ba1a1a;
     background: transparent;
     border: #ba1a1a 2px solid;
 }
 
-#deleteButton:hover {
+.deleteButton:hover {
     background: #ba1a1a;
     color: white;
 }
@@ -241,6 +242,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    z-index: 3;
 }
 
 .import-blur {
@@ -255,5 +257,24 @@ form {
 }
 
 .import-wrapper {
-    
+    z-index: 3;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.outline {
+    background: transparent;
+    border: 2px solid #3930e3;
+}
+
+h4 {
+    color: #FFF;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.1px;
 }
