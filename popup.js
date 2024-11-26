@@ -199,4 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    const wipeButton = document.querySelector("#wipeData");
+    wipeButton.addEventListener("click", () => {
+    const userChoice = window.confirm("Do you want to delete all your data?");
+
+    if (userChoice) {
+        chrome.storage.local.clear(() => console.log("Local storage cleared."));
+    }
+    })
 });
