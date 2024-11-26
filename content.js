@@ -98,7 +98,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function autofillForm(profile) {
-    // Enhanced selectors with multiple detection methods
     const selectors = {
         nameField: [
             "[name*='first_name']",
@@ -221,7 +220,6 @@ function autofillForm(profile) {
         ]
     };
 
-    // Function to find the first matching input
     function findInput(selectorList) {
         for (let selector of selectorList) {
             const field = document.querySelector(selector);
@@ -230,7 +228,6 @@ function autofillForm(profile) {
         return null;
     }
 
-    // Find and fill fields
     const nameField = findInput(selectors.nameField);
     const surnameField = findInput(selectors.surnameField);
     const fullnameField = findInput(selectors.fullnameField);
@@ -241,11 +238,9 @@ function autofillForm(profile) {
     const emailField = findInput(selectors.emailField);
     const numberField = findInput(selectors.numberField);
 
-    // Fill fields if both field and profile data exist
     if (nameField && profile.firstName) nameField.value = profile.firstName;
     if (surnameField && profile.lastName) surnameField.value = profile.lastName;
     
-    // Improved full name handling
     if (fullnameField) {
         if (profile.firstName && profile.lastName) {
             fullnameField.value = `${profile.firstName} ${profile.lastName}`;
