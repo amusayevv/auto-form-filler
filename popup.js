@@ -207,4 +207,20 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.local.clear(() => console.log("Local storage cleared."));
     }
     })
+
+    const addButton = document.getElementById("addButton");
+    const inputContainer = document.getElementById("inputContainer");
+    
+    addButton.addEventListener("click", () => {
+     
+        chrome.storage.local.get(["profiles"], (result) => {
+    
+            const newInput = document.createElement("input");
+            newInput.type = "text";
+            newInput.placeholder = "Enter";
+            newInput.className = "input_dynamic"; 
+    
+            inputContainer.appendChild(newInput);
+        });
+    });
 });
