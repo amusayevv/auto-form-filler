@@ -25,6 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("workPlace").value = selectedProfile.workPlace || "";
                 document.getElementById("number").value = selectedProfile.number || "";
                 document.getElementById("email").value = selectedProfile.email || "";
+
+                const inputContainer = document.getElementById("inputContainer");
+            inputContainer.innerHTML = ""; // Clear existing dynamic fields
+            if (selectedProfile.dynamicFields && Array.isArray(selectedProfile.dynamicFields)) {
+                selectedProfile.dynamicFields.forEach(value => {
+                    const newInput = document.createElement("input");
+                    newInput.type = "text";
+                    newInput.value = value;
+                    newInput.className = "input_dynamic";
+                    inputContainer.appendChild(newInput);
+                });
+            }
+
             }
         });
     });
@@ -42,8 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 degree: document.getElementById("degree").value || "",
                 workPlace: document.getElementById("workPlace").value || "",
                 number: document.getElementById("number").value || "",
-                email :document.getElementById("email").value || ""
+                email :document.getElementById("email").value || "",
+                dynamicFields: []
             };
+
+            const dynamicInputs = document.querySelectorAll(".input_dynamic");
+        dynamicInputs.forEach(input => {
+            if (input.value.trim() !== "") {
+                updatedProfile.dynamicFields.push(input.value.trim());
+            }
+        });
     
             chrome.storage.local.get(["profiles"], (result) => {
                 const profiles = result.profiles || [];
