@@ -36,8 +36,6 @@ if(window.location.href.includes("linkedin.com/in")) {
         const location = document.querySelector(".text-body-small.inline.t-black--light.break-words").innerText;
 
         
-        // Function to extract current workplace and educational institution from LinkedIn DOM
-        // OpenAI. (2024, November 20). ChatGPT (Version: GPT-4) [Large language model]. 
         const workplaceButton = document.querySelector(
             'button[aria-label^="Current company"]'
         );
@@ -45,7 +43,6 @@ if(window.location.href.includes("linkedin.com/in")) {
             ? workplaceButton.querySelector("div").innerText.trim()
             : "";
 
-        // Extract the educational institution
         const educationButton = document.querySelector(
             'button[aria-label^="Education"]'
         );
@@ -88,3 +85,37 @@ if(window.location.href.includes("linkedin.com/in")) {
         }
     });
 }
+
+chrome.runtime.onMessage.addListener((request) => {
+    if(request.action === "fill") {
+        chrome.storage.local.get("profiles", (data) => {
+            const data = data[0] || {};
+
+            if (data["name"]) {
+                const nameField = document.querySelector("input[name='name']") ||
+                    document.querySelector("#name") ||
+                    document.querySelector("input[placeholder='name']");
+                if (nameField) {
+                    nameField.value = data["name"];
+                }
+            }
+
+            if (data["surname"]) {
+                const surnameField = document.querySelector("input[name='surname']") ||
+                    document.querySelector("#surname") ||
+                    document.querySelector("input[placeholder='surname']");
+                if (surnameField) {
+                    surnameField.value = data["surname"];
+                }
+            }
+            if (data["jobTitle"]) {
+                const jobTitle = document.querySelector("input[name='jobTitle']") ||
+                    document.querySelector("#jobTitle") ||
+                    document.querySelector("input[placeholder='jobTitle']");
+                if (jobTitle) {
+                    jobTitle.value = data["jobTitle"];
+                }
+            }
+        });
+    }
+})
