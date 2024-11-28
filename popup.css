@@ -209,9 +209,20 @@ form {
     background: #191B1F;
 }
 
+.icon-button.active {
+    background: #191B1F;
+}
+
 .material-symbols-outlined {
   font-variation-settings:
   'FILL' 0,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 24
+}
+.material-symbols-outlined.active {
+  font-variation-settings:
+  'FILL' 1,
   'wght' 300,
   'GRAD' 0,
   'opsz' 24
@@ -283,3 +294,39 @@ h4 {
     line-height: 20px; /* 142.857% */
     letter-spacing: 0.1px;
 }
+
+.history-cnt {
+    padding-bottom: 40px;
+}
+
+table {
+    width: 100%;
+    color: white;
+    border-collapse: collapse;
+    border: 2px solid #2a2b3c;
+    margin-bottom: 140px;  
+    font-family: Roboto;
+}
+
+thead,
+tfoot {
+  background-color: #111317;
+  text-align: left;
+}
+
+th,
+td {
+  border: 1px solid #2a2b3c;
+  padding: 8px 10px;
+  overflow: scroll;
+}
+
+td span {
+    color: #43aefd;
+    text-align: center;
+}
+
+td a {
+    text-align: center;
+}
+

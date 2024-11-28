@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const importDataButton = document.querySelector("#importDataButton");
     importDataButton.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
         
         const importFile = document.querySelector("#import-file").files[0];
         if (!importFile) {
@@ -198,13 +198,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    
+
     const wipeButton = document.querySelector("#wipeData");
     wipeButton.addEventListener("click", () => {
-    const userChoice = window.confirm("Do you want to delete all your data?");
+        const userChoice = window.confirm("Do you want to delete all your data?");
 
-    if (userChoice) {
-        chrome.storage.local.clear(() => console.log("Local storage cleared."));
-    }
+        if (userChoice) {
+            chrome.storage.local.clear(() => console.log("Local storage cleared."));
+        }
     })
+
+    
+
+    function addTableRow(tableId, fullName, jobTitle, date, linkUrl) {
+        const table = document.getElementById(tableId);
+        if (!table) {
+            console.error(`Table with ID "${tableId}" not found.`);
+            return;
+        }
+
+        const tbody = document.createElement("tbody");
+
+        const tdFullName = document.createElement("td");
+        tdFullName.textContent = fullName;
+
+        const tdJobTitle = document.createElement("td");
+        tdJobTitle.textContent = jobTitle;
+
+        const tdDate = document.createElement("td");
+        tdDate.textContent = date;
+
+        const tdLink = document.createElement("td");
+        const link = document.createElement("a");
+        link.href = linkUrl;
+        link.className = "table-link";
+        link.innerHTML = `
+            <span class="material-symbols-outlined">open_in_new</span>
+        `;
+
+        tdLink.appendChild(link);
+
+        tbody.appendChild(tdFullName);
+        tbody.appendChild(tdJobTitle);
+        tbody.appendChild(tdDate);
+        tbody.appendChild(tdLink);
+
+        table.appendChild(tbody);
+    }
 });
