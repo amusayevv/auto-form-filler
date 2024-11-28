@@ -1,4 +1,4 @@
-if(window.location.href.includes("linkedin.com/in")) {
+if(window.location.href.includes("linkedin.com")) {
     console.log("LinkedIn profile found");
     
     const getLinkedinData = document.createElement("button");
