@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fillButton = document.getElementById("fillButton");
     console.log(fillButton);
     fillButton.addEventListener("click", () => {
-        alert(1);
+        // alert(1);
         chrome.storage.local.get("profiles", (profiles) => {
             const data = profiles[0] || {};
 
