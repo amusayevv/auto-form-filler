@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const saveButton = document.querySelector("#saveButton");
     saveButton.addEventListener("click", () => {
-        if(document.getElementById("fname").value && document.getElementById("lname").value) {
+        if (document.getElementById("fname").value && document.getElementById("lname").value) {
             const selectedIndex = dropdownMenu.value;
 
             const updatedProfile = {
@@ -42,19 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 degree: document.getElementById("degree").value || "",
                 workPlace: document.getElementById("workPlace").value || "",
                 number: document.getElementById("number").value || "",
-                email :document.getElementById("email").value || ""
+                email: document.getElementById("email").value || ""
             };
-    
+
             chrome.storage.local.get(["profiles"], (result) => {
                 const profiles = result.profiles || [];
                 if (selectedIndex !== "" && profiles[selectedIndex]) {
                     profiles[selectedIndex] = updatedProfile;
-    
+
                     try {
                         chrome.storage.local.set({ profiles: profiles }, () => {
                             alert("Profile updated successfully!");
                             console.log("Profile updated successfully!", profiles[selectedIndex]);
-                        });    
+                        });
                     } catch (error) {
                         console.error("Error: " + error);
                     }
@@ -65,25 +65,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             profile.firstName === updatedProfile.firstName &&
                             profile.lastName === updatedProfile.lastName
                         );
-                    
+
                         if (!isDuplicate) {
                             profiles.push(updatedProfile);
-                            chrome.storage.local.set({ profiles: profiles }, function() {
+                            chrome.storage.local.set({ profiles: profiles }, function () {
                                 console.log("Profile saved successfully!", profiles);
                                 alert("Profile saved successfully!");
                             });
                         } else {
                             console.log("Duplicate profile detected, not saving.");
                             alert("Duplicate profile detected, not saving.");
+                        }
+
                     }
-    
-                    } 
                     catch (error) {
                         console.error("Error saving profile:", error);
                     }
-            
+
                 }
-            });    
+            });
         }
 
         else {
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         chrome.storage.local.get(["profiles"], (result) => {
             const profiles = result.profiles || [];
-            if(selectedIndex !== "" && profiles[selectedIndex]) {
+            if (selectedIndex !== "" && profiles[selectedIndex]) {
                 profiles.splice(selectedIndex, 1);
 
                 try {
@@ -126,6 +126,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const importButton = document.querySelector("#importButton");
     importButton.addEventListener("click", () => {
-        
+
+    })
+
+    const fillButton = document.getElementById("fillButton");
+    console.log(fillButton);
+    fillButton.addEventListener("click", () => {
+        alert(1);
+        chrome.storage.local.get("profiles", (profiles) => {
+            const data = profiles[0] || {};
+
+            if (profiles["firstName"]) {
+                const nameField = document.querySelector("input[name='name']") ||
+                    document.querySelector("#name") ||
+                    document.querySelector("input[placeholder='name']");
+                if (nameField) {
+                    nameField.value = profiles["firstName"];
+                }
+            }
+
+            if (profiles["lastName"]) {
+                const surnameField = document.querySelector("input[name='surname']") ||
+                    document.querySelector("#surname") ||
+                    document.querySelector("input[placeholder='surname']");
+                if (surnameField) {
+                    surnameField.value = profiles["lastName"];
+                }
+            }
+            
+            // if (profiles["jobTitle"]) {
+            //     const jobTitle = document.querySelector("input[name='jobTitle']") ||
+            //         document.querySelector("#jobTitle") ||
+            //         document.querySelector("input[placeholder='jobTitle']");
+            //     if (jobTitle) {
+            //         jobTitle.value = profiles["jobTitle"];
+            //     }
+            // }
+        });
     })
 });
