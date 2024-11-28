@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const updatedProfiles = [...existingProfiles, ...importedData.profiles];
     
                     chrome.storage.local.set({ profiles: updatedProfiles }, () => {
-                        alert("Data successfully imported!");
+                        alert("Data successfully imported! Please restart the extension");
                         importPopup.classList.remove("active");
                     });
                 });

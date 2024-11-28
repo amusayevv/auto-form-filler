@@ -25,7 +25,6 @@ if(window.location.href.includes("linkedin.com")) {
     });
 
     document.body.appendChild(getLinkedinData);
-
     getLinkedinData.addEventListener("click", () => {
         console.log("Button clicked!");
         const userNameAndSurname = document.querySelector("h1").innerText;
@@ -36,8 +35,6 @@ if(window.location.href.includes("linkedin.com")) {
         const location = document.querySelector(".text-body-small.inline.t-black--light.break-words").innerText;
 
         
-        // Function to extract current workplace and educational institution from LinkedIn DOM
-        // OpenAI. (2024, November 20). ChatGPT (Version: GPT-4) [Large language model]. 
         const workplaceButton = document.querySelector(
             'button[aria-label^="Current company"]'
         );
@@ -45,7 +42,6 @@ if(window.location.href.includes("linkedin.com")) {
             ? workplaceButton.querySelector("div").innerText.trim()
             : "";
 
-        // Extract the educational institution
         const educationButton = document.querySelector(
             'button[aria-label^="Education"]'
         );
@@ -94,6 +90,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const profile = message.profile;
         console.log(profile);
         autofillForm(profile);
+        saveHistory(profile);
     }
 });
 
@@ -257,4 +254,37 @@ function autofillForm(profile) {
     if (workPlaceField && profile.workPlace) workPlaceField.value = profile.workPlace;    
     if (emailField && profile.email) emailField.value = profile.email;
     if (numberField && profile.number) numberField.value = profile.number;
+}
+
+function saveHistory(profile) {
+    const form = document.querySelector("form");
+    // form.addEventListener("submit", () => {
+        const date = new Date();
+        const currentDate = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
+        const jobTitle = document.querySelector(".content").innerText;
+        
+        let historyData = {
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            jobTitle: jobTitle,
+            date: currentDate,
+            formLink: window.location.href
+        };
+
+        console.log(historyData);
+        try {
+            chrome.storage.local.get(["history"], function(result) {
+                let history = result.history || [];
+            
+                history.push(historyData);
+                chrome.storage.local.set({ history: history }, function() {
+                    console.log("Job application saved successfully!", history);
+                });
+            });
+        } 
+        catch (error) {
+            console.error("Error saving job application:", error);
+        }
+        
+    // })
 }
