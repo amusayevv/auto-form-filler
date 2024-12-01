@@ -260,9 +260,11 @@ function saveHistory(profile) {
     const form = document.querySelector("form");
     // form.addEventListener("submit", () => {
         const date = new Date();
-        const currentDate = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
-        const jobTitle = document.querySelector(".content").innerText;
-        
+        const currentDate = `${date.getDay() + 1}/${date.getMonth() + 1}`
+        const h1Element = document.querySelector("h1");
+        const h2Element = document.querySelector("h2");
+        const jobTitle = h1Element ? h1Element.innerText : h2Element ? h2Element.innerText : "title";
+                        
         let historyData = {
             firstName: profile.firstName,
             lastName: profile.lastName,

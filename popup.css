@@ -45,6 +45,12 @@ table {
 
 /* Reset */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
 body {
     background: #05070b;
     color: #fff9f8;
@@ -55,6 +61,8 @@ body {
     font-weight: 400;
     font-size: 14px;
     overflow: scroll;
+    box-sizing: border-box;
+
 }
 
 label {
@@ -303,10 +311,32 @@ table {
     width: 100%;
     color: white;
     border-collapse: collapse;
-    border: 2px solid #2a2b3c;
+    box-shadow: inset 0 0 0 2px #2a2b3c;
     margin-bottom: 140px;  
     font-family: Roboto;
+    margin-top: 40px;
+    table-layout: fixed;
 }
+#historyTable th:nth-child(1),
+#historyTable td:nth-child(1) {
+    width: 25%;
+}
+
+#historyTable th:nth-child(2),
+#historyTable td:nth-child(2) {
+    width: 20%; /* Second column (Job Title) takes 40% */
+}
+
+#historyTable th:nth-child(3),
+#historyTable td:nth-child(3) {
+    width: 20%; /* Third column (Date Applied) takes 15% */
+}
+
+#historyTable th:nth-child(4),
+#historyTable td:nth-child(4) {
+    width: 35%; /* Fourth column (Status) takes 15% */
+}
+
 
 thead,
 tfoot {
@@ -321,12 +351,23 @@ td {
   overflow: scroll;
 }
 
-td span {
+a {
     color: #43aefd;
-    text-align: center;
+    text-decoration: none;
 }
 
-td a {
-    text-align: center;
+.home-cnt.active {
+    display: block;
 }
 
+.home-cnt {
+    display: none;
+}
+
+.history-cnt {
+    display: none;
+}
+
+.history-cnt.active {
+    display: block;
+}

@@ -201,48 +201,101 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const wipeButton = document.querySelector("#wipeData");
     wipeButton.addEventListener("click", () => {
-        const userChoice = window.confirm("Do you want to delete all your data?");
+        const userChoice = window.confirm("This will clear all your saved profiles and dashboard. Do you want to continue?");
 
         if (userChoice) {
             chrome.storage.local.clear(() => console.log("Local storage cleared."));
         }
     })
 
-    
+    const historyButton = document.querySelector("#historyButton");
+    historyButton.addEventListener("click", () => {
+        document.querySelector(".history-cnt").classList.add("active");
+        document.querySelector(".home-cnt").classList.remove("active");
+        document.querySelector("#homeButton").classList.remove("active");
+        document.querySelector("#homeButton span").classList.remove("active");
+        document.querySelector("#historyButton").classList.add("active");
+        document.querySelector("#historyButton span").classList.add("active");
 
-    function addTableRow(tableId, fullName, jobTitle, date, linkUrl) {
+        chrome.storage.local.get(["history"], function(result) {
+            let history = result.history || [];
+
+            if(!document.querySelector("td"))
+                history.forEach((historyData) => addTableRow("historyTable", `${historyData.firstName} ${historyData.lastName}`, historyData.jobTitle, historyData.date, historyData.formLink))
+        })
+    });  
+
+    function addTableRow(tableId, fullName, jobTitle, date, linkUrl, status = "Submitted") {
         const table = document.getElementById(tableId);
         if (!table) {
             console.error(`Table with ID "${tableId}" not found.`);
             return;
         }
-
+    
         const tbody = document.createElement("tbody");
-
+    
         const tdFullName = document.createElement("td");
         tdFullName.textContent = fullName;
-
+    
         const tdJobTitle = document.createElement("td");
-        tdJobTitle.textContent = jobTitle;
-
+        const jobLink = document.createElement("a");
+        jobLink.href = linkUrl;
+        jobLink.target = "_blank";
+        jobLink.className = "table-link";
+        jobLink.textContent = jobTitle;  // Set job title as the link text
+        tdJobTitle.appendChild(jobLink);
+    
         const tdDate = document.createElement("td");
         tdDate.textContent = date;
-
-        const tdLink = document.createElement("td");
-        const link = document.createElement("a");
-        link.href = linkUrl;
-        link.className = "table-link";
-        link.innerHTML = `
-            <span class="material-symbols-outlined">open_in_new</span>
-        `;
-
-        tdLink.appendChild(link);
-
+    
+        // Create the dropdown for Status
+        const tdStatus = document.createElement("td");
+        const statusSelect = document.createElement("select");
+        
+        // Status options
+        const statuses = ["Submitted", "Interviewing", "Got the job", "Rejected"];
+        statuses.forEach(statusOption => {
+            const option = document.createElement("option");
+            option.value = statusOption;
+            option.textContent = statusOption;
+            if (statusOption === status) {
+                option.selected = true; // Set default selected value
+            }
+            statusSelect.appendChild(option);
+        });
+    
+        tdStatus.appendChild(statusSelect);
+    
         tbody.appendChild(tdFullName);
-        tbody.appendChild(tdJobTitle);
+        tbody.appendChild(tdJobTitle);   // Job column now contains the link
         tbody.appendChild(tdDate);
-        tbody.appendChild(tdLink);
-
+        tbody.appendChild(tdStatus);    // Add the status dropdown to the row
+    
         table.appendChild(tbody);
     }
+        
+    const homeButton = document.querySelector("#homeButton");
+    homeButton.addEventListener("click", () => {
+        document.querySelector(".home-cnt").classList.add("active");
+        document.querySelector(".history-cnt").classList.remove("active");
+        document.querySelector("#historyButton").classList.remove("active");
+        document.querySelector("#historyButton span").classList.remove("active");
+        document.querySelector("#homeButton").classList.add("active");
+        document.querySelector("#homeButton span").classList.add("active");
+    })
+
+    const deleteHistoryButton = document.querySelector("#deleteHistoryButton")
+    deleteHistoryButton.addEventListener("click", () => {
+        deleteHistory();
+    })
+    function deleteHistory() {
+        chrome.storage.local.remove("history", () => {
+          if (chrome.runtime.lastError) {
+            console.error("Error removing history:", chrome.runtime.lastError);
+          } else {
+            alert("History deleted successfully. Please restart the extension");
+          }
+        });
+      }
+      
 });
