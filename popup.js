@@ -25,6 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("workPlace").value = selectedProfile.workPlace || "";
                 document.getElementById("number").value = selectedProfile.number || "";
                 document.getElementById("email").value = selectedProfile.email || "";
+
+                const inputContainer = document.getElementById("inputContainer");
+            inputContainer.innerHTML = ""; // Clear existing dynamic fields
+            if (selectedProfile.dynamicFields && Array.isArray(selectedProfile.dynamicFields)) {
+                selectedProfile.dynamicFields.forEach((value, fieldIndex) => {
+                    InputDeleteButton(inputContainer, value, true, selectedIndex, fieldIndex);
+                });
+            }
+
             }
         });
     });
@@ -42,8 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 degree: document.getElementById("degree").value || "",
                 workPlace: document.getElementById("workPlace").value || "",
                 number: document.getElementById("number").value || "",
-                email :document.getElementById("email").value || ""
+                email :document.getElementById("email").value || "",
+                dynamicFields: []
             };
+
+            const dynamicInputs = document.querySelectorAll(".input_dynamic");
+        dynamicInputs.forEach(input => {
+            if (input.value.trim() !== "") {
+                updatedProfile.dynamicFields.push(input.value.trim());
+            }
+        });
     
             chrome.storage.local.get(["profiles"], (result) => {
                 const profiles = result.profiles || [];
@@ -231,6 +248,47 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(`Table with ID "${tableId}" not found.`);
             return;
         }
+    
+    addButton.addEventListener("click", () => {
+     
+        chrome.storage.local.get(["profiles"], (result) => {
+            InputDeleteButton(inputContainer);
+        });
+    });
+
+    function InputDeleteButton(container, value = "", isSaved = false, profileIndex = null, fieldIndex = null) {
+        const fieldWrapper = document.createElement("div");
+        fieldWrapper.className = "field-wrapper";
+    
+        const inputField = document.createElement("input");
+        inputField.type = "text";
+        inputField.value = value;
+        inputField.placeholder = "Enter";
+        inputField.className = "input_dynamic";
+    
+        const deleteButtonField = document.createElement("button");//for delete button
+        deleteButtonField.textContent = "Delete";
+        deleteButtonField.className = "delete_button";
+    
+        deleteButtonField.addEventListener("click", () => { //functions for delete button
+            fieldWrapper.remove(); 
+            if (isSaved && profileIndex !== null && fieldIndex !== null) {
+                chrome.storage.local.get(["profiles"], (result) => {
+                    const profiles = result.profiles || [];
+                    if (profiles[profileIndex] && profiles[profileIndex].dynamicFields) {
+                        profiles[profileIndex].dynamicFields.splice(fieldIndex, 1);
+                        chrome.storage.local.set({ profiles }, () => {
+                            console.log("Field deleted from storage.");
+                        });
+                    }
+                });
+            }
+        });
+
+        fieldWrapper.appendChild(inputField);
+        fieldWrapper.appendChild(deleteButtonField);
+        container.appendChild(fieldWrapper);
+    }
     
         const tbody = document.createElement("tbody");
     
