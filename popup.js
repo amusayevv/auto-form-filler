@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const importDataButton = document.querySelector("#importDataButton");
     importDataButton.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
         
         const importFile = document.querySelector("#import-file").files[0];
         if (!importFile) {
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const updatedProfiles = [...existingProfiles, ...importedData.profiles];
     
                     chrome.storage.local.set({ profiles: updatedProfiles }, () => {
-                        alert("Data successfully imported!");
+                        alert("Data successfully imported! Please restart the extension");
                         importPopup.classList.remove("active");
                     });
                 });
@@ -198,29 +198,102 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    
+
     const wipeButton = document.querySelector("#wipeData");
     wipeButton.addEventListener("click", () => {
-    const userChoice = window.confirm("Do you want to delete all your data?");
+        const userChoice = window.confirm("This will clear all your saved profiles and dashboard. Do you want to continue?");
 
-    if (userChoice) {
-        chrome.storage.local.clear(() => console.log("Local storage cleared."));
-    }
+        if (userChoice) {
+            chrome.storage.local.clear(() => console.log("Local storage cleared."));
+        }
     })
 
-    const addButton = document.getElementById("addButton");
-    const inputContainer = document.getElementById("inputContainer");
+    const historyButton = document.querySelector("#historyButton");
+    historyButton.addEventListener("click", () => {
+        document.querySelector(".history-cnt").classList.add("active");
+        document.querySelector(".home-cnt").classList.remove("active");
+        document.querySelector("#homeButton").classList.remove("active");
+        document.querySelector("#homeButton span").classList.remove("active");
+        document.querySelector("#historyButton").classList.add("active");
+        document.querySelector("#historyButton span").classList.add("active");
+
+        chrome.storage.local.get(["history"], function(result) {
+            let history = result.history || [];
+
+            if(!document.querySelector("td"))
+                history.forEach((historyData) => addTableRow("historyTable", `${historyData.firstName} ${historyData.lastName}`, historyData.jobTitle, historyData.date, historyData.formLink))
+        })
+    });  
+
+    function addTableRow(tableId, fullName, jobTitle, date, linkUrl, status = "Submitted") {
+        const table = document.getElementById(tableId);
+        if (!table) {
+            console.error(`Table with ID "${tableId}" not found.`);
+            return;
+        }
     
-    addButton.addEventListener("click", () => {
-     
-        chrome.storage.local.get(["profiles"], (result) => {
+        const tbody = document.createElement("tbody");
     
-            const newInput = document.createElement("input");
-            newInput.type = "text";
-            newInput.placeholder = "Enter";
-            newInput.className = "input_dynamic"; 
+        const tdFullName = document.createElement("td");
+        tdFullName.textContent = fullName;
     
-            inputContainer.appendChild(newInput);
+        const tdJobTitle = document.createElement("td");
+        const jobLink = document.createElement("a");
+        jobLink.href = linkUrl;
+        jobLink.target = "_blank";
+        jobLink.className = "table-link";
+        jobLink.textContent = jobTitle;
+        tdJobTitle.appendChild(jobLink);
+    
+        const tdDate = document.createElement("td");
+        tdDate.textContent = date;
+    
+        const tdStatus = document.createElement("td");
+        const statusSelect = document.createElement("select");
+        
+        const statuses = ["Submitted", "Interviewing", "Got the job", "Rejected"];
+        statuses.forEach(statusOption => {
+            const option = document.createElement("option");
+            option.value = statusOption;
+            option.textContent = statusOption;
+            if (statusOption === status) {
+                option.selected = true;
+            }
+            statusSelect.appendChild(option);
         });
-    });
+    
+        tdStatus.appendChild(statusSelect);
+    
+        tbody.appendChild(tdFullName);
+        tbody.appendChild(tdJobTitle);
+        tbody.appendChild(tdDate);
+        tbody.appendChild(tdStatus);
+    
+        table.appendChild(tbody);
+    }
+        
+    const homeButton = document.querySelector("#homeButton");
+    homeButton.addEventListener("click", () => {
+        document.querySelector(".home-cnt").classList.add("active");
+        document.querySelector(".history-cnt").classList.remove("active");
+        document.querySelector("#historyButton").classList.remove("active");
+        document.querySelector("#historyButton span").classList.remove("active");
+        document.querySelector("#homeButton").classList.add("active");
+        document.querySelector("#homeButton span").classList.add("active");
+    })
+
+    const deleteHistoryButton = document.querySelector("#deleteHistoryButton")
+    deleteHistoryButton.addEventListener("click", () => {
+        deleteHistory();
+    })
+    function deleteHistory() {
+        chrome.storage.local.remove("history", () => {
+          if (chrome.runtime.lastError) {
+            console.error("Error removing history:", chrome.runtime.lastError);
+          } else {
+            alert("History deleted successfully. Please restart the extension");
+          }
+        });
+      }
+      
 });
