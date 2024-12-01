@@ -361,4 +361,25 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(fieldWrapper);
     }
     
+
+    document.getElementById('saveForLater').addEventListener('click', () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "saveForm" }, (response) => {
+                if (response.success) {
+                    alert("Form data saved for later!");
+                }
+            });
+        });
+    });
+    
+    document.getElementById('restoreForm').addEventListener('click', () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "restoreForm" }, (response) => {
+                if (response.success) {
+                    alert("Form data restored!");
+                }
+            });
+        });
+    });
+    
 });
