@@ -242,24 +242,22 @@ document.addEventListener('DOMContentLoaded', () => {
         jobLink.href = linkUrl;
         jobLink.target = "_blank";
         jobLink.className = "table-link";
-        jobLink.textContent = jobTitle;  // Set job title as the link text
+        jobLink.textContent = jobTitle;
         tdJobTitle.appendChild(jobLink);
     
         const tdDate = document.createElement("td");
         tdDate.textContent = date;
     
-        // Create the dropdown for Status
         const tdStatus = document.createElement("td");
         const statusSelect = document.createElement("select");
         
-        // Status options
         const statuses = ["Submitted", "Interviewing", "Got the job", "Rejected"];
         statuses.forEach(statusOption => {
             const option = document.createElement("option");
             option.value = statusOption;
             option.textContent = statusOption;
             if (statusOption === status) {
-                option.selected = true; // Set default selected value
+                option.selected = true;
             }
             statusSelect.appendChild(option);
         });
@@ -267,9 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tdStatus.appendChild(statusSelect);
     
         tbody.appendChild(tdFullName);
-        tbody.appendChild(tdJobTitle);   // Job column now contains the link
+        tbody.appendChild(tdJobTitle);
         tbody.appendChild(tdDate);
-        tbody.appendChild(tdStatus);    // Add the status dropdown to the row
+        tbody.appendChild(tdStatus);
     
         table.appendChild(tbody);
     }
