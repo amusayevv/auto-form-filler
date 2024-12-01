@@ -94,6 +94,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const profile = message.profile;
         console.log(profile);
         autofillForm(profile);
+        saveHistory(profile);
     }
 });
 
@@ -257,4 +258,39 @@ function autofillForm(profile) {
     if (workPlaceField && profile.workPlace) workPlaceField.value = profile.workPlace;    
     if (emailField && profile.email) emailField.value = profile.email;
     if (numberField && profile.number) numberField.value = profile.number;
+}
+
+function saveHistory(profile) {
+    const form = document.querySelector("form");
+    // form.addEventListener("submit", () => {
+        const date = new Date();
+        const currentDate = `${date.getDay() + 1}/${date.getMonth() + 1}`
+        const h1Element = document.querySelector("h1");
+        const h2Element = document.querySelector("h2");
+        const jobTitle = h1Element ? h1Element.innerText : h2Element ? h2Element.innerText : "title";
+                        
+        let historyData = {
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            jobTitle: jobTitle,
+            date: currentDate,
+            formLink: window.location.href
+        };
+
+        console.log(historyData);
+        try {
+            chrome.storage.local.get(["history"], function(result) {
+                let history = result.history || [];
+            
+                history.push(historyData);
+                chrome.storage.local.set({ history: history }, function() {
+                    console.log("Job application saved successfully!", history);
+                });
+            });
+        } 
+        catch (error) {
+            console.error("Error saving job application:", error);
+        }
+        
+    // })
 }
