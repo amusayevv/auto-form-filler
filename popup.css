@@ -366,6 +366,7 @@ a {
 
 .history-cnt {
     display: none;
+    overflow: scroll;
 }
 
 .history-cnt.active {

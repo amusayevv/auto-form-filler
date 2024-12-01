@@ -294,3 +294,47 @@ function saveHistory(profile) {
         
     // })
 }
+
+// Function to get form data
+function getFormData() {
+    const formElements = document.querySelectorAll('input, select, textarea');
+    const formData = {};
+    formElements.forEach(el => {
+        if (el.name) {
+            formData[el.name] = el.value;
+        }
+    });
+    return formData;
+}
+
+// Function to fill form data
+function fillFormData(formData) {
+    for (const name in formData) {
+        const element = document.querySelector(`[name="${name}"]`);
+        if (element) {
+            element.value = formData[name];
+        }
+    }
+}
+
+// Listen for messages from popup.js
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "saveForm") {
+        const formData = getFormData();
+        chrome.storage.local.set({ savedForm: formData }, () => {
+            sendResponse({ success: true });
+        });
+        return true; // Keeps the message channel open for sendResponse
+    }
+
+    if (request.action === "restoreForm") {
+        chrome.storage.local.get('savedForm', (result) => {
+            if (result.savedForm) {
+                fillFormData(result.savedForm);
+            }
+            sendResponse({ success: true });
+        });
+        return true;
+    }
+});
+
