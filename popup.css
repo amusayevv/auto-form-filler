@@ -278,3 +278,39 @@ h4 {
     line-height: 20px; /* 142.857% */
     letter-spacing: 0.1px;
 }
+
+.field-wrapper {
+    display: flex;
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.input_dynamic {
+    background-color: #111317;
+    background: #111317; 
+    color: #b7b8c4;
+    flex-grow: 1;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 2px solid #2A2B3C; 
+    margin-right: 10px;
+    border: 2px solid #2A2B3C;
+}
+
+.delete_button {
+    background-color:#ba1a1a; 
+    color: white; 
+    border: none;
+    padding: 3px 3px; 
+    border-radius: 4px; 
+    font-size: 12px; 
+    width: 50px; 
+    height: 35px;
+
+}
+
+.delete_button:hover {
+    background: #ba1a1a;
+    color: white;
+}
