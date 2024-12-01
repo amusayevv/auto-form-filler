@@ -1,6 +1,6 @@
-if(window.location.href.includes("linkedin.com")) {
+if (window.location.href.includes("linkedin.com")) {
     console.log("LinkedIn profile found");
-    
+
     const getLinkedinData = document.createElement("button");
     getLinkedinData.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#ffffff"><path d="M200-120v-665q0-24 18-42t42-18h336q-23 26-34.5 55.5T550-725q0 67 43 117t107 61q17 2 30 2t30-2v427L480-240 200-120Zm500-485v-90h-90v-60h90v-90h60v90h90v60h-90v90h-60Z"/></svg> Get LinkedIn data';
     getLinkedinData.classList.add = "addButton";
@@ -25,7 +25,6 @@ if(window.location.href.includes("linkedin.com")) {
     });
 
     document.body.appendChild(getLinkedinData);
-
     getLinkedinData.addEventListener("click", () => {
         console.log("Button clicked!");
         const userNameAndSurname = document.querySelector("h1").innerText;
@@ -35,9 +34,7 @@ if(window.location.href.includes("linkedin.com")) {
         const title = document.querySelector(".text-body-medium").innerText;
         const location = document.querySelector(".text-body-small.inline.t-black--light.break-words").innerText;
 
-        
-        // Function to extract current workplace and educational institution from LinkedIn DOM
-        // OpenAI. (2024, November 20). ChatGPT (Version: GPT-4) [Large language model]. 
+
         const workplaceButton = document.querySelector(
             'button[aria-label^="Current company"]'
         );
@@ -45,14 +42,13 @@ if(window.location.href.includes("linkedin.com")) {
             ? workplaceButton.querySelector("div").innerText.trim()
             : "";
 
-        // Extract the educational institution
         const educationButton = document.querySelector(
             'button[aria-label^="Education"]'
         );
         const educationText = educationButton
             ? educationButton.querySelector("div").innerText.trim()
             : "";
-        
+
 
         let userData = {
             firstName: firstName,
@@ -62,18 +58,18 @@ if(window.location.href.includes("linkedin.com")) {
             workPlace: workplaceText,
             location: location
         };
-    
+
         try {
-            chrome.storage.local.get(["profiles"], function(result) {
+            chrome.storage.local.get(["profiles"], function (result) {
                 let profiles = result.profiles || [];
                 const isDuplicate = profiles.some(profile =>
                     profile.firstName === userData.firstName &&
                     profile.lastName === userData.lastName
                 );
-            
+
                 if (!isDuplicate) {
                     profiles.push(userData);
-                    chrome.storage.local.set({ profiles: profiles }, function() {
+                    chrome.storage.local.set({ profiles: profiles }, function () {
                         console.log("Profile saved successfully!", profiles);
                         alert("Profile saved successfully!");
                     });
@@ -81,7 +77,7 @@ if(window.location.href.includes("linkedin.com")) {
                     console.log("Duplicate profile detected, not saving.");
                 }
             });
-        } 
+        }
         catch (error) {
             console.error("Error saving profile:", error);
             alert("Error saving profile:", error);
@@ -103,7 +99,7 @@ function autofillForm(profile) {
         nameField: [
             "[name*='first_name']",
             "[name*='firstName']",
-            "[name*='name']", 
+            "[name*='name']",
             "[id*='first_name']",
             "[id*='firstName']",
             "[id*='name']",
@@ -113,10 +109,10 @@ function autofillForm(profile) {
             "input[aria-label*='first name']"
         ],
         surnameField: [
-            "[name*='last_name']", 
+            "[name*='last_name']",
             "[name*='lastName']",
             "[name*='surname']",
-            "[id*='last_name']", 
+            "[id*='last_name']",
             "[id*='lastName']",
             "[id*='surname']",
             "[placeholder*='last name']",
@@ -241,7 +237,7 @@ function autofillForm(profile) {
 
     if (nameField && profile.firstName) nameField.value = profile.firstName;
     if (surnameField && profile.lastName) surnameField.value = profile.lastName;
-    
+
     if (fullnameField) {
         if (profile.firstName && profile.lastName) {
             fullnameField.value = `${profile.firstName} ${profile.lastName}`;
@@ -255,7 +251,7 @@ function autofillForm(profile) {
     if (locationField && profile.location) locationField.value = profile.location;
     if (schoolField && profile.school) schoolField.value = profile.school;
     if (degreeField && profile.degree) degreeField.value = profile.degree;
-    if (workPlaceField && profile.workPlace) workPlaceField.value = profile.workPlace;    
+    if (workPlaceField && profile.workPlace) workPlaceField.value = profile.workPlace;
     if (emailField && profile.email) emailField.value = profile.email;
     if (numberField && profile.number) numberField.value = profile.number;
 }
@@ -263,39 +259,38 @@ function autofillForm(profile) {
 function saveHistory(profile) {
     const form = document.querySelector("form");
     // form.addEventListener("submit", () => {
-        const date = new Date();
-        const currentDate = `${date.getDay() + 1}/${date.getMonth() + 1}`
-        const h1Element = document.querySelector("h1");
-        const h2Element = document.querySelector("h2");
-        const jobTitle = h1Element ? h1Element.innerText : h2Element ? h2Element.innerText : "title";
-                        
-        let historyData = {
-            firstName: profile.firstName,
-            lastName: profile.lastName,
-            jobTitle: jobTitle,
-            date: currentDate,
-            formLink: window.location.href
-        };
+    const date = new Date();
+    const currentDate = `${date.getDay() + 1}/${date.getMonth() + 1}`
+    const h1Element = document.querySelector("h1");
+    const h2Element = document.querySelector("h2");
+    const jobTitle = h1Element ? h1Element.innerText : h2Element ? h2Element.innerText : "title";
 
-        console.log(historyData);
-        try {
-            chrome.storage.local.get(["history"], function(result) {
-                let history = result.history || [];
-            
-                history.push(historyData);
-                chrome.storage.local.set({ history: history }, function() {
-                    console.log("Job application saved successfully!", history);
-                });
+    let historyData = {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        jobTitle: jobTitle,
+        date: currentDate,
+        formLink: window.location.href
+    };
+
+    console.log(historyData);
+    try {
+        chrome.storage.local.get(["history"], function (result) {
+            let history = result.history || [];
+
+            history.push(historyData);
+            chrome.storage.local.set({ history: history }, function () {
+                console.log("Job application saved successfully!", history);
             });
-        } 
-        catch (error) {
-            console.error("Error saving job application:", error);
-        }
-        
+        });
+    }
+    catch (error) {
+        console.error("Error saving job application:", error);
+    }
+
     // })
 }
 
-// Function to get form data
 function getFormData() {
     const formElements = document.querySelectorAll('input, select, textarea');
     const formData = {};
@@ -307,7 +302,6 @@ function getFormData() {
     return formData;
 }
 
-// Function to fill form data
 function fillFormData(formData) {
     for (const name in formData) {
         const element = document.querySelector(`[name="${name}"]`);
@@ -317,14 +311,13 @@ function fillFormData(formData) {
     }
 }
 
-// Listen for messages from popup.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "saveForm") {
         const formData = getFormData();
         chrome.storage.local.set({ savedForm: formData }, () => {
             sendResponse({ success: true });
         });
-        return true; // Keeps the message channel open for sendResponse
+        return true;
     }
 
     if (request.action === "restoreForm") {
@@ -336,5 +329,43 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
         return true;
     }
+
+    if (request.action === "generateLetter") {
+        generateLetter(request, sendResponse);
+        return true;
+    }
 });
 
+async function generateLetter(request, sendResponse) {
+    (async () => {
+        try {
+            const text = `Write a cover letter for this job ${request.job} according to this user: ${request.data}`;
+
+            const body = JSON.stringify({
+                contents: [{parts:[{text:text}]}]
+            });
+
+            const result = await fetch(
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=API_KEY",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: body
+                }
+            );
+            if (!result.ok) {
+                throw new Error("Error");
+            }
+            
+            const resultData = await result.json();
+            const letter = resultData.candidates[0].content.parts[0].text;
+            console.log(letter);
+            sendResponse({ success: true, data: letter });
+        } catch (error) {
+            console.error("Error:", error);
+            sendResponse({ success: false });
+        }
+    })();
+}
