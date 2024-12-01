@@ -346,7 +346,7 @@ async function generateLetter(request, sendResponse) {
             });
 
             const result = await fetch(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=API_KEY",
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyC9uwm1nBqKCPZD1gNbNAiLEDe1GhOeQJc",
                 {
                     method: "POST",
                     headers: {
